@@ -1,12 +1,13 @@
 (ns aoc22.01
   (:require [clojure.string :as str]))
 
+(defn parse-numbers [line]
+  (map parse-long (str/split-lines line)))
+
 (defn parse-input [input]
-  (->> input
-      (str/split-lines)               ; ("1000" "2000" "3000" "" "4000" "" ..)
-      (partition-by empty?)           ; (("1000" "2000" "3000") ("") ("4000") ("") ...)
-      (filter #(not-empty (first %))) ; (("1000" "2000" "3000") ("4000") ("5000" "6000") ...)
-      (map (fn [group] (reduce + (map parse-long group)))))) ; (6000 4000 11000 ...)
+  (->> (str/split input #"\n\n")
+       (map parse-numbers)
+       (map #(reduce + %))))
 
 (defn solution-1 [input]
   (->> input
